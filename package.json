@@ -1,0 +1,56 @@
+{
+	"name": "react-form",
+	"version": "0.0.1",
+	"description": "A simple react library that manages form values and errors.",
+	"main": "dist/index.js",
+	"scripts": {
+		"test:run": "jest --config jest.config.json",
+		"test:watch": "jest --watch --config jest.config.json",
+		"format": "prettier --write \"src/**/*.ts\" \"src/**/*.tsx\" \"src/**/*.js\"",
+		"lint": "eslint",
+		"build": "rm -rf ./dist/* && tsc",
+		"prepare": "npm run build",
+		"prepublishOnly": "npm run test:run && npm run lint",
+		"preversion": "npm run lint",
+		"postversion": "git push && git push --tags"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/ramilamparo/react-form.git"
+	},
+	"keywords": [
+		"form",
+		"react",
+		"react-native"
+	],
+	"author": "ramilamparo",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/ramilamparo/react-form/issues"
+	},
+	"homepage": "https://github.com/ramilamparo/react-form#readme",
+	"dependencies": {
+		"@types/enzyme-adapter-react-16": "^1.0.6",
+		"@types/lodash.get": "^4.4.6",
+		"@types/lodash.set": "^4.3.6",
+		"@types/react": "^16.9.34",
+		"@types/yup": "^0.26.37",
+		"lodash.get": "^4.4.2",
+		"lodash.set": "^4.3.2",
+		"react": "^16.13.1",
+		"react-dom": "^16.13.1"
+	},
+	"devDependencies": {
+		"@types/enzyme": "^3.10.5",
+		"@types/jest": "^25.2.1",
+		"enzyme": "^3.11.0",
+		"enzyme-adapter-react-16": "^1.15.2",
+		"eslint": "^6.8.0",
+		"eslint-config-prettier": "^6.10.1",
+		"jest": "^25.4.0",
+		"prettier": "^2.0.4",
+		"ts-jest": "^25.4.0",
+		"typescript": "^3.8.3",
+		"yup": "^0.28.4"
+	}
+}
