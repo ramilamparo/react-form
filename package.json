@@ -1,6 +1,6 @@
 {
 	"name": "react-form",
-	"version": "0.0.3",
+	"version": "0.0.4",
 	"description": "A simple react library that manages form values and errors.",
 	"main": "dist/index.js",
 	"scripts": {
@@ -38,7 +38,8 @@
 		"lodash.get": "^4.4.2",
 		"lodash.set": "^4.3.2",
 		"react": "^16.13.1",
-		"react-dom": "^16.13.1"
+		"react-dom": "^16.13.1",
+		"yup": "^0.28.4"
 	},
 	"devDependencies": {
 		"@types/enzyme": "^3.10.5",
@@ -50,7 +51,6 @@
 		"jest": "^25.4.0",
 		"prettier": "^2.0.4",
 		"ts-jest": "^25.4.0",
-		"typescript": "^3.8.3",
-		"yup": "^0.28.4"
+		"typescript": "^3.8.3"
 	}
 }
