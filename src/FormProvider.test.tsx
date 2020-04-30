@@ -8,7 +8,6 @@ describe("FormProvider", () => {
 		let values = {
 			username: ""
 		};
-		let setFieldValueOut: any = () => {};
 		const form = shallow(
 			<FormProvider
 				values={values}

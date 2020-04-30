@@ -1,5 +1,4 @@
 import React, { Component, createContext } from "react";
-import { ObjectSchema, ValidationError } from "yup";
 import _ from "lodash";
 
 export type FieldErrors<Values extends object> = Partial<
@@ -12,9 +11,7 @@ export interface FormProviderProps<
 	Values extends object,
 	Context extends any = {}
 > {
-	validationSchema?:
-		| ObjectSchema<Values>
-		| ((value: Values, context?: Context) => void); // Must throw ValidationError
+	validationSchema?: any | ((value: Values, context?: Context) => void);
 	values: Values;
 	errors?: FieldErrors<Values>;
 	onChange: (value: Values, errors: FieldErrors<Values>, name?: string) => void;
@@ -39,7 +36,7 @@ export const FormContext = createContext<FormContextProviderValue>({
 	setFieldValue: () => {},
 	setTouchedField: () => {},
 	errors: {},
-	touched: {},
+	touched: {}
 });
 
 export class FormProvider<Values extends object> extends Component<
@@ -68,41 +65,9 @@ export class FormProvider<Values extends object> extends Component<
 		const { validationSchema, context } = this.props;
 		let errorMessages: FieldErrors<Values> = {};
 		if (validationSchema) {
-			try {
-				if (typeof validationSchema === "function") {
-					validationSchema(values, context);
-				} else {
-					validationSchema.validateSync(values, {
-						abortEarly: false,
-						stripUnknown: true,
-						context,
-					});
-				}
-			} catch (e) {
-				if (e instanceof ValidationError) {
-					errorMessages = this.getFieldErrors(e);
-				}
-			}
+			validationSchema(values, context);
 		}
 		return errorMessages;
-	};
-
-	private getFieldErrors = (
-		errors: ValidationError,
-		existingError: Partial<Record<keyof Values, string>> = {}
-	) => {
-		let newErrors = { ...existingError };
-
-		if (errors.path) {
-			_.set(newErrors, errors.path, errors.message);
-		}
-
-		for (const error of errors.inner) {
-			_.set(newErrors, error.path, error.message);
-			newErrors = this.getFieldErrors(error, newErrors);
-		}
-
-		return newErrors;
 	};
 
 	render() {
@@ -114,7 +79,7 @@ export class FormProvider<Values extends object> extends Component<
 					setFieldValue: this.setFieldValue,
 					setTouchedField: this.setTouchedField,
 					errors: this.props.errors || {},
-					touched: this.props.touched || {},
+					touched: this.props.touched || {}
 				}}
 			>
 				{children}
