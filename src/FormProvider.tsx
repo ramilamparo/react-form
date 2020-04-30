@@ -11,7 +11,7 @@ export interface FormProviderProps<
 	Values extends object,
 	Context extends any = {}
 > {
-	validationSchema?: any | ((value: Values, context?: Context) => void);
+	validation?: (value: Values, context?: Context) => FieldErrors<Values>;
 	values: Values;
 	errors?: FieldErrors<Values>;
 	onChange: (value: Values, errors: FieldErrors<Values>, name?: string) => void;
@@ -62,10 +62,10 @@ export class FormProvider<Values extends object> extends Component<
 	};
 
 	private validateForm = (values: Values) => {
-		const { validationSchema, context } = this.props;
+		const { validation, context } = this.props;
 		let errorMessages: FieldErrors<Values> = {};
-		if (validationSchema) {
-			validationSchema(values, context);
+		if (validation) {
+			errorMessages = validation(values, context);
 		}
 		return errorMessages;
 	};
