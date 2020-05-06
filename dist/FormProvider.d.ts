@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import { ObjectSchema } from "yup";
 export declare type FieldErrors<Values extends object> = Partial<Record<keyof Values, string>>;
 export declare type TouchedFields<Values> = Partial<Record<keyof Values, boolean>>;
+export declare type DisabledFields<Values> = Partial<Record<keyof Values, boolean>>;
 export interface FormProviderProps<Values extends object, Context extends any = {}> {
-    validationSchema?: ObjectSchema<Values> | ((value: Values, context?: Context) => void);
+    validation?: (value: Values, context?: Context) => FieldErrors<Values>;
     values: Values;
     errors?: FieldErrors<Values>;
     onChange: (value: Values, errors: FieldErrors<Values>, name?: string) => void;
@@ -13,6 +13,7 @@ export interface FormProviderProps<Values extends object, Context extends any = 
     validateOnMount?: boolean;
     context?: Context;
     validateOnContextChange?: boolean;
+    disabledFields?: DisabledFields<Values>;
 }
 interface FormContextProviderValue {
     values: object;
@@ -20,6 +21,7 @@ interface FormContextProviderValue {
     setTouchedField: (name: string) => void;
     errors: FieldErrors<object>;
     touched: TouchedFields<object>;
+    disabled: DisabledFields<object>;
 }
 export declare const FormContext: React.Context<FormContextProviderValue>;
 export declare class FormProvider<Values extends object> extends Component<FormProviderProps<Values>> {
@@ -27,7 +29,6 @@ export declare class FormProvider<Values extends object> extends Component<FormP
     private setFieldValue;
     private setTouchedField;
     private validateForm;
-    private getFieldErrors;
     render(): JSX.Element;
 }
 export {};

@@ -35,7 +35,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var react_1 = __importStar(require("react"));
-var yup_1 = require("yup");
 var lodash_1 = __importDefault(require("lodash"));
 exports.FormContext = react_1.createContext({
     values: {},
@@ -43,6 +42,7 @@ exports.FormContext = react_1.createContext({
     setTouchedField: function () { },
     errors: {},
     touched: {},
+    disabled: {}
 });
 var FormProvider = /** @class */ (function (_super) {
     __extends(FormProvider, _super);
@@ -59,41 +59,12 @@ var FormProvider = /** @class */ (function (_super) {
                 _this.props.onFieldTouch(__assign(__assign({}, _this.props.touched), (_a = {}, _a[name] = true, _a)), name);
         };
         _this.validateForm = function (values) {
-            var _a = _this.props, validationSchema = _a.validationSchema, context = _a.context;
+            var _a = _this.props, validation = _a.validation, context = _a.context;
             var errorMessages = {};
-            if (validationSchema) {
-                try {
-                    if (typeof validationSchema === "function") {
-                        validationSchema(values, context);
-                    }
-                    else {
-                        validationSchema.validateSync(values, {
-                            abortEarly: false,
-                            stripUnknown: true,
-                            context: context,
-                        });
-                    }
-                }
-                catch (e) {
-                    if (e instanceof yup_1.ValidationError) {
-                        errorMessages = _this.getFieldErrors(e);
-                    }
-                }
+            if (validation) {
+                errorMessages = validation(values, context);
             }
             return errorMessages;
-        };
-        _this.getFieldErrors = function (errors, existingError) {
-            if (existingError === void 0) { existingError = {}; }
-            var newErrors = __assign({}, existingError);
-            if (errors.path) {
-                lodash_1.default.set(newErrors, errors.path, errors.message);
-            }
-            for (var _i = 0, _a = errors.inner; _i < _a.length; _i++) {
-                var error = _a[_i];
-                lodash_1.default.set(newErrors, error.path, error.message);
-                newErrors = _this.getFieldErrors(error, newErrors);
-            }
-            return newErrors;
         };
         return _this;
     }
@@ -112,6 +83,7 @@ var FormProvider = /** @class */ (function (_super) {
                 setTouchedField: this.setTouchedField,
                 errors: this.props.errors || {},
                 touched: this.props.touched || {},
+                disabled: this.props.disabledFields || {}
             } }, children));
     };
     return FormProvider;

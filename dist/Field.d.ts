@@ -14,6 +14,10 @@ interface FieldChildProps<Value> {
     values: {
         [key: string]: any;
     };
+    disabled: boolean;
+    disabledFields: {
+        [key: string]: boolean;
+    };
 }
 export interface InputProps<Value> {
     name: string;
@@ -27,5 +31,5 @@ export interface FieldProps<Value> {
     defaultValue?: any;
     children: (props: FieldChildProps<Value>) => ReactElement | null;
 }
-export declare const Field: <Value>({ children, name, defaultValue, }: FieldProps<Value>) => React.ReactElement<any, string | ((props: any) => React.ReactElement<any, string | any | (new (props: any) => React.Component<any, any, any>)> | null) | (new (props: any) => React.Component<any, any, any>)>;
+export declare const Field: <Value>({ children, name, defaultValue }: FieldProps<Value>) => React.ReactElement<any, string | ((props: any) => React.ReactElement<any, string | any | (new (props: any) => React.Component<any, any, any>)> | null) | (new (props: any) => React.Component<any, any, any>)>;
 export {};
