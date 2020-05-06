@@ -7,6 +7,8 @@ export type FieldErrors<Values extends object> = Partial<
 
 export type TouchedFields<Values> = Partial<Record<keyof Values, boolean>>;
 
+export type DisabledFields<Values> = Partial<Record<keyof Values, boolean>>;
+
 export interface FormProviderProps<
 	Values extends object,
 	Context extends any = {}
@@ -21,6 +23,7 @@ export interface FormProviderProps<
 	validateOnMount?: boolean;
 	context?: Context;
 	validateOnContextChange?: boolean;
+	disabledFields?: DisabledFields<Values>;
 }
 
 interface FormContextProviderValue {
@@ -29,6 +32,7 @@ interface FormContextProviderValue {
 	setTouchedField: (name: string) => void;
 	errors: FieldErrors<object>;
 	touched: TouchedFields<object>;
+	disabled: DisabledFields<object>;
 }
 
 export const FormContext = createContext<FormContextProviderValue>({
@@ -36,7 +40,8 @@ export const FormContext = createContext<FormContextProviderValue>({
 	setFieldValue: () => {},
 	setTouchedField: () => {},
 	errors: {},
-	touched: {}
+	touched: {},
+	disabled: {}
 });
 
 export class FormProvider<Values extends object> extends Component<
@@ -79,7 +84,8 @@ export class FormProvider<Values extends object> extends Component<
 					setFieldValue: this.setFieldValue,
 					setTouchedField: this.setTouchedField,
 					errors: this.props.errors || {},
-					touched: this.props.touched || {}
+					touched: this.props.touched || {},
+					disabled: this.props.disabledFields || {}
 				}}
 			>
 				{children}

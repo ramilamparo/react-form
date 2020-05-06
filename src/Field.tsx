@@ -12,6 +12,8 @@ interface FieldChildProps<Value> {
 	touchedFields: { [key: string]: boolean };
 	errors: { [key: string]: string };
 	values: { [key: string]: any };
+	disabled: boolean;
+	disabledFields: { [key: string]: boolean };
 }
 
 export interface InputProps<Value> {
@@ -31,7 +33,7 @@ export interface FieldProps<Value> {
 export const Field = <Value,>({
 	children,
 	name,
-	defaultValue,
+	defaultValue
 }: FieldProps<Value>): ReactElement => {
 	return (
 		<FormContext.Consumer>
@@ -41,10 +43,12 @@ export const Field = <Value,>({
 				setTouchedField,
 				errors,
 				touched: touchedFields,
+				disabled: disabledFields
 			}) => {
 				const value = _.get(values, name);
 				const error = _.get(errors, name);
 				const touched = _.get(touchedFields, name);
+				const disabled = _.get(disabledFields, name);
 				const childProps: FieldChildProps<Value> = {
 					value: value === undefined ? defaultValue : value,
 					setFieldValue: (value: Value) => setFieldValue(name, value),
@@ -54,6 +58,8 @@ export const Field = <Value,>({
 					errors,
 					touched,
 					touchedFields,
+					disabled,
+					disabledFields
 				};
 				return children(childProps);
 			}}
