@@ -9,12 +9,11 @@
 		"format": "prettier --write \"src/**/*.ts\" \"src/**/*.tsx\" \"src/**/*.js\"",
 		"lint": "eslint",
 		"build": "rm -rf ./dist/* && tsc",
-		"tsc": "tsc",
 		"prepare": "npm run build",
 		"prepublishOnly": "npm run test:run && npm run lint",
 		"preversion": "npm run lint",
 		"postversion": "git push && git push --tags",
-		"postinstall": "npm run tsc"
+		"postinstall": "tsc"
 	},
 	"repository": {
 		"type": "git",
