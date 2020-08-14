@@ -26,7 +26,7 @@ export interface FormProviderProps<
 	disabledFields?: DisabledFields<Values>;
 }
 
-interface FormContextProviderValue {
+export interface FormContextProviderValue {
 	values: object;
 	setFieldValue: (name: string, value: any) => void;
 	setTouchedField: (name: string) => void;

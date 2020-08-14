@@ -2,8 +2,9 @@ import React, { FC, ReactElement } from "react";
 import _ from "lodash";
 
 import { FormContext } from ".";
+import { mapContextToFieldChildProps } from "./utils";
 
-interface FieldChildProps<Value> {
+export interface FieldChildProps<Value> {
 	value: Value;
 	setFieldValue: (value: Value) => void;
 	onBlur: () => void;
@@ -14,14 +15,6 @@ interface FieldChildProps<Value> {
 	values: { [key: string]: any };
 	disabled: boolean;
 	disabledFields: { [key: string]: boolean };
-}
-
-export interface InputProps<Value> {
-	name: string;
-	transformer?: (value: Value) => Value;
-	helperText?: string;
-	className?: string;
-	label?: string;
 }
 
 export interface FieldProps<Value> {
@@ -37,31 +30,13 @@ export const Field = <Value,>({
 }: FieldProps<Value>): ReactElement => {
 	return (
 		<FormContext.Consumer>
-			{({
-				values,
-				setFieldValue,
-				setTouchedField,
-				errors,
-				touched: touchedFields,
-				disabled: disabledFields
-			}) => {
-				const value = _.get(values, name);
-				const error = _.get(errors, name);
-				const touched = _.get(touchedFields, name);
-				const disabled = _.get(disabledFields, name);
-				const childProps: FieldChildProps<Value> = {
-					value: value === undefined ? defaultValue : value,
-					setFieldValue: (value: Value) => setFieldValue(name, value),
-					onBlur: () => setTouchedField(name),
-					error,
-					values,
-					errors,
-					touched,
-					touchedFields,
-					disabled,
-					disabledFields
-				};
-				return children(childProps);
+			{(props) => {
+				return children(
+					mapContextToFieldChildProps<Value>(props, {
+						name,
+						defaultValue
+					})
+				);
 			}}
 		</FormContext.Consumer>
 	);
