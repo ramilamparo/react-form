@@ -9,5 +9,5 @@
 		"outDir": "dist",
 		"declaration": true
 	},
-	"exclude": ["src/**/*.test.ts", "src/**/*.test.tsx", "setupTests.ts"]
+	"exclude": ["src/**/*.test.ts", "src/**/*.test.tsx", "setupTests.ts", "dist"]
 }
