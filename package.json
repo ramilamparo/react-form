@@ -1,6 +1,6 @@
 {
 	"name": "react-form",
-	"version": "0.2.2",
+	"version": "0.2.1",
 	"description": "A simple react library that manages form values and errors.",
 	"main": "dist/index.js",
 	"scripts": {
@@ -9,11 +9,12 @@
 		"format": "prettier --write \"src/**/*.ts\" \"src/**/*.tsx\" \"src/**/*.js\"",
 		"lint": "eslint",
 		"build": "rm -rf ./dist/* && tsc",
+		"tsc": "tsc",
 		"prepare": "npm run build",
 		"prepublishOnly": "npm run test:run && npm run lint",
 		"preversion": "npm run lint",
 		"postversion": "git push && git push --tags",
-		"postinstall": "npm run build"
+		"postinstall": "npm run tsc"
 	},
 	"repository": {
 		"type": "git",
@@ -38,7 +39,8 @@
 		"lodash.get": "^4.4.2",
 		"lodash.set": "^4.3.2",
 		"react": "^16.13.1",
-		"react-dom": "^16.13.1"
+		"react-dom": "^16.13.1",
+		"typescript": "^3.8.3"
 	},
 	"devDependencies": {
 		"@types/enzyme": "^3.10.5",
@@ -49,7 +51,6 @@
 		"eslint-config-prettier": "^6.10.1",
 		"jest": "^25.4.0",
 		"prettier": "^2.0.4",
-		"ts-jest": "^25.4.0",
-		"typescript": "^3.9.7"
+		"ts-jest": "^25.4.0"
 	}
 }
