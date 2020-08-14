@@ -15,7 +15,7 @@ export interface FormProviderProps<Values extends object, Context extends any = 
     validateOnContextChange?: boolean;
     disabledFields?: DisabledFields<Values>;
 }
-interface FormContextProviderValue {
+export interface FormContextProviderValue {
     values: object;
     setFieldValue: (name: string, value: any) => void;
     setTouchedField: (name: string) => void;
@@ -31,4 +31,3 @@ export declare class FormProvider<Values extends object> extends Component<FormP
     private validateForm;
     render(): JSX.Element;
 }
-export {};

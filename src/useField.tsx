@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { FieldChildProps } from "./Field";
-import { FormContext } from "../dist";
+import { FormContext } from "./FormProvider";
 import { mapContextToFieldChildProps } from "./utils";
 
 export const useField = <Value,>(
