@@ -11,7 +11,8 @@
 		"build": "rm -rf ./dist/* && tsc",
 		"prepublishOnly": "npm run test:run && npm run lint",
 		"preversion": "npm run lint",
-		"postversion": "git push && git push --tags"
+		"postversion": "git push && git push --tags",
+		"postinstall": "tsc"
 	},
 	"repository": {
 		"type": "git",
