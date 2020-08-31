@@ -2,22 +2,22 @@ import { useState, Dispatch, SetStateAction } from "react";
 import { FieldErrors, TouchedFields } from "./FormProvider";
 import { usePrevious, PreviousValue } from "./usePrevious";
 
-export interface UseFormDataOptionsBase<Values extends object> {
+export interface UseFormStateOptionsBase<Values extends object> {
 	errors?: FieldErrors<Values>;
 	touched?: TouchedFields<Values>;
 	formErrors?: string[];
 }
-export interface UseFormDataOptions<Values extends object>
-	extends UseFormDataOptionsBase<Values> {
+export interface UseFormStateOptions<Values extends object>
+	extends UseFormStateOptionsBase<Values> {
 	values: Values;
 }
 
-export interface UseNullableFormDataOptions<Values extends object>
-	extends UseFormDataOptionsBase<Values> {
+export interface UseNullableFormStateOptions<Values extends object>
+	extends UseFormStateOptionsBase<Values> {
 	values: Values | null;
 }
 
-export interface UseFormDataReturnBase<Values extends object> {
+export interface UseFormStateReturnBase<Values extends object> {
 	setValues: Dispatch<SetStateAction<Values>>;
 	errors: FieldErrors<Values>;
 	setErrors: Dispatch<SetStateAction<FieldErrors<Values>>>;
@@ -31,33 +31,33 @@ export interface UseFormDataReturnBase<Values extends object> {
 	previousFormErrors: PreviousValue<string[]>;
 }
 
-export interface UseFormDataReturn<Values extends object>
-	extends UseFormDataReturnBase<Values> {
+export interface UseFormStateReturn<Values extends object>
+	extends UseFormStateReturnBase<Values> {
 	values: Values;
 	previousValues: PreviousValue<Values>;
 }
 
-export interface UseNullableFormDataReturn<Values extends object>
-	extends UseFormDataReturnBase<Values> {
+export interface UseNullableFormStateReturn<Values extends object>
+	extends UseFormStateReturnBase<Values> {
 	values: Values | null;
 	previousValues: PreviousValue<Values | null>;
 }
 
-export interface UseFormDataFunction {
+export interface UseFormStateFunction {
 	<Values extends object>(
-		options: UseFormDataOptions<Values>
-	): UseFormDataReturn<Values>;
+		options: UseFormStateOptions<Values>
+	): UseFormStateReturn<Values>;
 	<Values extends object>(
-		options: UseNullableFormDataOptions<Values>
-	): UseNullableFormDataReturn<Values>;
+		options: UseNullableFormStateOptions<Values>
+	): UseNullableFormStateReturn<Values>;
 }
 
-export const useFormData: UseFormDataFunction = <Values extends object>({
+export const useFormState: UseFormStateFunction = <Values extends object>({
 	values: initialValues,
 	errors: initialErrors = {},
 	touched: initialTouched = {},
 	formErrors: initialFormErrors = []
-}: UseFormDataOptions<Values>) => {
+}: UseFormStateOptions<Values>) => {
 	const [values, setValues] = useState(initialValues);
 	const previousValues = usePrevious(values);
 	const [errors, setErrors] = useState(initialErrors);

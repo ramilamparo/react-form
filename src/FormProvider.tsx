@@ -1,5 +1,5 @@
-import React, { Component, createContext } from "react";
-import _ from "lodash";
+import React, { Component, createContext, Context } from "react";
+import set from "lodash.set";
 
 export type FieldErrors<Values extends object> = Partial<
 	Record<keyof Values, string>
@@ -26,16 +26,16 @@ export interface FormProviderProps<
 	disabledFields?: DisabledFields<Values>;
 }
 
-export interface FormContextProviderValue {
-	values: object;
-	setFieldValue: (name: string, value: any) => void;
+export interface FormContextProviderValue<Values extends object> {
+	values: Values;
+	setFieldValue: <Value>(name: string, value: Value) => void;
 	setTouchedField: (name: string) => void;
-	errors: FieldErrors<object>;
-	touched: TouchedFields<object>;
-	disabled: DisabledFields<object>;
+	errors: FieldErrors<Values>;
+	touched: TouchedFields<Values>;
+	disabled: DisabledFields<Values>;
 }
 
-export const FormContext = createContext<FormContextProviderValue>({
+export const FormContext = createContext<FormContextProviderValue<object>>({
 	values: {},
 	setFieldValue: () => {},
 	setTouchedField: () => {},
@@ -43,6 +43,9 @@ export const FormContext = createContext<FormContextProviderValue>({
 	touched: {},
 	disabled: {}
 });
+
+export const getFormContext = <Values extends object>() =>
+	(FormContext as unknown) as Context<FormContextProviderValue<Values>>;
 
 export class FormProvider<Values extends object> extends Component<
 	FormProviderProps<Values>
@@ -56,14 +59,15 @@ export class FormProvider<Values extends object> extends Component<
 	}
 
 	private setFieldValue = (name: string, value: any) => {
-		const newValues = _.set({ ...this.props.values }, name, value);
+		const { values, onChange } = this.props;
+		const newValues = set({ ...values }, name, value);
 		const errors = this.validateForm(newValues);
-		this.props.onChange(newValues, errors, name);
+		onChange(newValues, errors, name);
 	};
 
 	private setTouchedField = (name: string) => {
-		this.props.onFieldTouch &&
-			this.props.onFieldTouch({ ...this.props.touched, [name]: true }, name);
+		const { onFieldTouch, touched } = this.props;
+		onFieldTouch && onFieldTouch({ ...touched, [name]: true }, name);
 	};
 
 	private validateForm = (values: Values) => {
@@ -76,16 +80,16 @@ export class FormProvider<Values extends object> extends Component<
 	};
 
 	render() {
-		const { values, children } = this.props;
+		const { values, children, errors, touched, disabledFields } = this.props;
 		return (
 			<FormContext.Provider
 				value={{
 					values,
 					setFieldValue: this.setFieldValue,
 					setTouchedField: this.setTouchedField,
-					errors: this.props.errors || {},
-					touched: this.props.touched || {},
-					disabled: this.props.disabledFields || {}
+					errors: errors || {},
+					touched: touched || {},
+					disabled: disabledFields || {}
 				}}
 			>
 				{children}

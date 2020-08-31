@@ -1,8 +1,45 @@
 {
-	"extends": ["eslint:recommended", "prettier"],
+	"env": {
+		"es2020": true
+	},
+	"extends": [
+		"eslint:recommended",
+		"airbnb-typescript",
+		"react-app",
+		"plugin:prettier/recommended",
+		"prettier/@typescript-eslint",
+		"prettier/react",
+		"prettier/standard",
+		"plugin:@typescript-eslint/recommended"
+	],
+	"plugins": ["react", "prettier", "@typescript-eslint", "import"],
+	"parser": "@typescript-eslint/parser",
+	"parserOptions": {
+		"ecmaFeatures": {
+			"jsx": true
+		},
+		"ecmaVersion": 11,
+		"sourceType": "module",
+		"project": "./tsconfig.json"
+	},
+	"settings": {
+		"import/parsers": {
+			"@typescript-eslint/parser": [".ts", ".tsx"]
+		},
+		"import/resolver": {
+			"typescript": {
+				"alwaysTryTypes": true
+			}
+		}
+	},
 	"rules": {
-		"interface-name": false,
-		"object-literal-sort-keys": false,
-		"ordered-imports": false
+		"lines-between-class-members": "warn",
+		"import/no-unresolved": "error",
+		"import/prefer-default-export": "off",
+		"react/prop-types": "off",
+		"react/jsx-props-no-spreading": "off",
+		"@typescript-eslint/explicit-function-return-type": "off",
+		"@typescript-eslint/no-explicit-any": "off",
+		"no-plusplus": "off"
 	}
 }

@@ -1,13 +1,12 @@
-import React, { useContext } from "react";
-import { FieldChildProps } from "./Field";
-import { FormContext } from "./FormProvider";
-import { mapContextToFieldChildProps } from "./utils";
+import { useContext } from "react";
+import { FieldChildProps, mapContextToFieldChildProps } from "./Field";
+import { getFormContext } from "./FormProvider";
 
-export const useField = <Value,>(
+export const useField = <Values extends object>(
 	name: string,
-	options: { defaultValue: Value }
-): FieldChildProps<Value> => {
-	const field = useContext(FormContext);
+	options: { defaultValue: Values }
+): FieldChildProps<Values> => {
+	const field = useContext(getFormContext<Values>());
 
 	const childProps = mapContextToFieldChildProps(field, { name, ...options });
 
