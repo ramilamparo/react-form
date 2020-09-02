@@ -1,6 +1,12 @@
 import React, { ReactElement } from "react";
 import get from "lodash.get";
-import { FormContext, FormContextProviderValue } from "./FormProvider";
+import {
+	FormContext,
+	FormContextProviderValue,
+	FieldErrors,
+	DisabledFields,
+	TouchedFields
+} from "./FormProvider";
 
 export interface FieldChildProps<Value> {
 	value: Value;
@@ -8,11 +14,11 @@ export interface FieldChildProps<Value> {
 	onBlur: () => void;
 	error: string | undefined;
 	touched: boolean;
-	touchedFields: { [key: string]: boolean };
-	errors: { [key: string]: string };
+	touchedFields: TouchedFields<object>;
+	errors: FieldErrors<object>;
 	values: { [key: string]: any };
 	disabled: boolean;
-	disabledFields: { [key: string]: boolean };
+	disabledFields: DisabledFields<object>;
 }
 
 export interface FieldProps<Value> {
@@ -21,13 +27,16 @@ export interface FieldProps<Value> {
 	children: (props: FieldChildProps<Value>) => ReactElement | null;
 }
 
-export const mapContextToFieldChildProps = <Value,>(
-	context: FormContextProviderValue<object>,
+export const mapContextToFieldChildProps = <
+	FieldValue,
+	FormValues extends object
+>(
+	context: FormContextProviderValue<FormValues>,
 	options: {
 		name: string;
-		defaultValue?: Value;
+		defaultValue?: FieldValue;
 	}
-): FieldChildProps<Value> => {
+): FieldChildProps<FieldValue> => {
 	const {
 		values,
 		setFieldValue,
@@ -41,9 +50,9 @@ export const mapContextToFieldChildProps = <Value,>(
 	const error = get(errors, name);
 	const touched = get(touchedFields, name);
 	const disabled = get(disabledFields, name);
-	const childProps: FieldChildProps<Value> = {
+	const childProps: FieldChildProps<FieldValue> = {
 		value: value === undefined ? defaultValue : value,
-		setFieldValue: (newValue: Value) => setFieldValue(name, newValue),
+		setFieldValue: (newValue: FieldValue) => setFieldValue(name, newValue),
 		onBlur: () => setTouchedField(name),
 		error,
 		values,
@@ -65,7 +74,7 @@ export const Field = <Value,>({
 		<FormContext.Consumer>
 			{(props) => {
 				return children(
-					mapContextToFieldChildProps<Value>(props, {
+					mapContextToFieldChildProps<Value, object>(props, {
 						name,
 						defaultValue
 					})
