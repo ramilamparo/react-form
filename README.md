@@ -1,6 +1,6 @@
 # React-Form
 
-React-Form is a controlled form state management.
+react-form is a state management library designed for controlled input components and simple and customizable input validation.
 
 ## Installation
 
