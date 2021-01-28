@@ -19,15 +19,15 @@ Installing a specific version with npm:
 ```typescript
 import { Field, FormProvider, useFormState } from "react-form";
 
-const Input = ({ id, label, ...inputProps }: InputProps) => {
+const Input = ({ name, label, ...inputProps }: InputProps) => {
 	return (
-		<Field<string> defaultValue="" name={id}>
+		<Field<string> defaultValue="" name={name}>
 			{({ value, setFieldValue }) => (
 				<>
-					<label htmlFor={id}>{label}</StyledLabel>
+					<label htmlFor={name}>{label}</StyledLabel>
 					<input
 						{...inputProps}
-						id={id}
+						id={name}
 						value={value}
 						onChange={(e) => setFieldValue(e.target.value)}
 					/>
@@ -63,15 +63,15 @@ const Form = () => {
 ### With validation
 
 ```typescript
-const Input = ({ id, label, ...inputProps }: InputProps) => {
+const Input = ({ name, label, ...inputProps }: InputProps) => {
 	return (
-		<Field<string> defaultValue="" name={id}>
+		<Field<string> defaultValue="" name={name}>
 			{({ value, error, setFieldValue, touched }) => (
 				<>
-					<label htmlFor={id}>{error ? error : label}</StyledLabel>
+					<label htmlFor={name}>{error ? error : label}</StyledLabel>
 					<input
 						{...inputProps}
-						id={id}
+						id={name}
 						value={value}
 						onChange={(e) => setFieldValue(e.target.value)}
 					/>
