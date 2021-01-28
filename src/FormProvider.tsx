@@ -19,10 +19,8 @@ export interface FormProviderProps<
 	onChange: (value: Values, errors: FieldErrors<Values>, name?: string) => void;
 	touched?: TouchedFields<Values>;
 	onFieldTouch?: (fields: TouchedFields<Values>, name?: string) => void;
-	castOnChange?: boolean;
 	validateOnMount?: boolean;
 	context?: Context;
-	validateOnContextChange?: boolean;
 	disabledFields?: DisabledFields<Values>;
 }
 
