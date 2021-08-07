@@ -19,8 +19,8 @@ export interface FieldProps<Value> {
     defaultValue?: any;
     children: (props: FieldChildProps<Value>) => ReactElement | null;
 }
-export declare const mapContextToFieldChildProps: <FieldValue, FormValues extends object>(context: FormContextProviderValue<FormValues>, options: {
+export declare const useContextToFieldChildProps: <FieldValue, FormValues extends object>(context: FormContextProviderValue<FormValues>, options: {
     name: string;
     defaultValue?: FieldValue | undefined;
 }) => FieldChildProps<FieldValue>;
-export declare const Field: <Value>({ children, name, defaultValue }: FieldProps<Value>) => ReactElement;
+export declare const Field: <Value>({ children, name, defaultValue }: FieldProps<Value>) => ReactElement | null;

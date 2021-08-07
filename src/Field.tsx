@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import { ReactElement, useContext, useMemo, useCallback } from "react";
 import get from "lodash.get";
 import {
 	FormContext,
@@ -27,7 +27,7 @@ export interface FieldProps<Value> {
 	children: (props: FieldChildProps<Value>) => ReactElement | null;
 }
 
-export const mapContextToFieldChildProps = <
+export const useContextToFieldChildProps = <
 	FieldValue,
 	FormValues extends object
 >(
@@ -46,22 +46,59 @@ export const mapContextToFieldChildProps = <
 		disabled: disabledFields
 	} = context;
 	const { name, defaultValue } = options;
-	const value = get(values, name);
-	const error = get(errors, name);
-	const touched = get(touchedFields, name);
-	const disabled = get(disabledFields, name);
-	const childProps: FieldChildProps<FieldValue> = {
-		value: value === undefined ? defaultValue : value,
-		setFieldValue: (newValue: FieldValue) => setFieldValue(name, newValue),
-		onBlur: () => setTouchedField(name),
+
+	const value = useMemo(() => {
+		return get(values, name);
+	}, [values, name]);
+
+	const error = useMemo(() => {
+		return get(errors, name);
+	}, [errors, name]);
+
+	const touched = useMemo(() => {
+		return get(touchedFields, name) || false;
+	}, [touchedFields, name]);
+
+	const disabled = useMemo(() => {
+		return get(disabledFields, name) || false;
+	}, [disabledFields, name]);
+
+	const onBlur = useCallback(() => {
+		setTouchedField(name);
+	}, [setTouchedField, name]);
+
+	const setFieldValueChildProp = useCallback(
+		(newValue: FieldValue) => setFieldValue(name, newValue),
+		[setFieldValue, name]
+	);
+
+	const childProps: FieldChildProps<FieldValue> = useMemo(() => {
+		return {
+			value: value === undefined ? defaultValue : value,
+			setFieldValue: setFieldValueChildProp,
+			onBlur,
+			error,
+			values,
+			errors,
+			touched,
+			touchedFields,
+			disabled,
+			disabledFields
+		};
+	}, [
+		defaultValue,
+		disabled,
+		onBlur,
 		error,
 		values,
 		errors,
 		touched,
+		disabledFields,
 		touchedFields,
-		disabled,
-		disabledFields
-	};
+		setFieldValueChildProp,
+		value
+	]);
+
 	return childProps;
 };
 
@@ -69,17 +106,12 @@ export const Field = <Value,>({
 	children,
 	name,
 	defaultValue
-}: FieldProps<Value>): ReactElement => {
-	return (
-		<FormContext.Consumer>
-			{(props) => {
-				return children(
-					mapContextToFieldChildProps<Value, object>(props, {
-						name,
-						defaultValue
-					})
-				);
-			}}
-		</FormContext.Consumer>
-	);
+}: FieldProps<Value>): ReactElement | null => {
+	const context = useContext<FormContextProviderValue<object>>(FormContext);
+	const childProps = useContextToFieldChildProps<Value, object>(context, {
+		name,
+		defaultValue
+	});
+
+	return children(childProps);
 };

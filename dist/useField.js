@@ -17,6 +17,6 @@ var Field_1 = require("./Field");
 var FormProvider_1 = require("./FormProvider");
 exports.useField = function (name, options) {
     var field = react_1.useContext(FormProvider_1.getFormContext());
-    var childProps = Field_1.mapContextToFieldChildProps(field, __assign({ name: name }, options));
+    var childProps = Field_1.useContextToFieldChildProps(field, __assign({ name: name }, options));
     return childProps;
 };
